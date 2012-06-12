@@ -29,6 +29,9 @@ cmd_cca="zb\x06"
 cmd_set_state="zb\x07"
 data_xmit_block="zb\x09"
 resp_recv_block="zb\x0b"
+cmd_set_panid="zb\x0f"
+cmd_set_short_addr="zb\x10"
+cmd_set_long_addr="zb\x11"
 
 IDLE_MODE = 0
 RX_MODE = 2
@@ -166,4 +169,12 @@ class DQ:
 			else:
 				break
 		return self.status
+	
+	def set_panid(self, panid):
+		return self.__send_cmd(cmd_set_panid+panid)
 
+	def set_shortaddr(self, shortaddr):
+		return self.__send_cmd(cmd_set_short_addr+shortaddr)
+
+	def set_longaddr(self, longaddr):
+		return self.__send_cmd(cmd_set_long_addr+longaddr)
