@@ -32,8 +32,11 @@
 #include <termios.h>
 #include <unistd.h>
 #include <errno.h>
+#include <linux/serial.h>
 
 #include "ieee802154.h"
+
+// #define CUSTOM_BAUDRATE 1875000
 
 int main(int argc, char **argv) {
 	int fd, ret, s;
@@ -65,6 +68,7 @@ int main(int argc, char **argv) {
 	}
 
 	struct termios tbuf;
+	struct serial_struct ss;
 
 	memset(&tbuf, 0, sizeof(tbuf));
 
@@ -91,8 +95,21 @@ int main(int argc, char **argv) {
 	tbuf.c_cc[7] = 0;
 	tbuf.c_cc[VMIN] = 1;
 	*/
-	cfsetospeed(&tbuf, B115200);
-	cfsetispeed(&tbuf, B115200);
+
+	/* set custom speed 1875000bps*/
+	/*
+	ioctl(fd, TIOCGSERIAL, &ss);
+	ss.flags = (ss.flags & ~ASYNC_SPD_MASK) | ASYNC_SPD_CUST;
+	ss.custom_divisor = (ss.baud_base + (CUSTOM_BAUDRATE / 2)) / CUSTOM_BAUDRATE;
+	ioctl(fd, TIOCSSERIAL, &ss);
+
+	cfsetospeed(&tbuf, B38400);
+	cfsetispeed(&tbuf, B38400);
+	*/
+	
+	// this speed is reasonable as well
+	cfsetospeed(&tbuf, B921600);
+	cfsetispeed(&tbuf, B921600);
 
 	if (tcsetattr(fd, TCSANOW, &tbuf) < 0) {
 		perror("tcsetattr");

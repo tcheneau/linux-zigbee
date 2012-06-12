@@ -45,8 +45,8 @@ class DQ:
 
 		try:
 			self.oldattrs = tcgetattr(self.file)
-			attrs = [IGNPAR, self.oldattrs[1], 0, 0, B115200, B115200, self.oldattrs[6]]
-			attrs[2] = B115200 | CS8 | CLOCAL | CREAD
+			attrs = [IGNPAR, self.oldattrs[1], 0, 0, 0010007, 0010007, self.oldattrs[6]]
+			attrs[2] = 0010007 | CS8 | CLOCAL | CREAD
 			attrs[6][VTIME] = 0
 			attrs[6][VMIN] = 1
 			tcflush(self.file, TCIFLUSH)
